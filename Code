@@ -1,0 +1,29 @@
+
+detectOutliers <- function(data) {
+  center <- colMeans(data[, 2:3])
+  cov <- cov(data[, 2:3])
+  data$mahalanobis <- mahalanobis(data[, 2:3], center, cov)
+  x <- round(mean(data$mahalanobis))
+  data$p_value <-
+    pchisq(data$mahalanobis, df = x, lower.tail = FALSE)
+  p_and_IDs <- data[, c(1, 5)]
+  inliers <- subset(data[, 2:3], data$p_value >= 0.05)
+  outliers <- subset(data[, 2:3], data$p_value < 0.05)
+  inliers$group <- "black"
+    outliers$group <- "red"
+      final_table <- rbind(inliers, outliers)
+      final_table[, 1:2]
+      
+      p_and_IDs <- subset(data[, c(1, 5)], data$p_value < 0.05)
+      
+      plot(final_table[, 1:2], col = final_table$group)
+      
+      write.table(
+        p_and_IDs[, 1],
+        file = "outliers.txt",
+        sep = "\t",
+        row.names = FALSE,
+        quote = FALSE,
+        col.names = FAL
+      )
+}
