@@ -26,4 +26,4 @@ detectOutliers <- function(data) {
         quote = FALSE,
         col.names = FALSE
       )
-
+}
